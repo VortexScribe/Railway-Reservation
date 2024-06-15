@@ -7,6 +7,13 @@ st.set_page_config(page_title='Railway Reservation')
 
 conn = sqlite3.connect('railway.db') #create database
 
+try:
+    conn=sqlite3.connect('railway.db')
+    return conn
+except sqlite3.Error as e:
+        st.error(f"Database connection error: {e}")
+        return None
+
 current_page='Login or Sign Up' #create current page
 
 c=conn.cursor() #execute the connection of database

@@ -2,6 +2,9 @@ import streamlit as st
 import sqlite3
 import pandas as pd
 
+st.set_page_config(page_title='Railway Reservation')
+
+
 conn = sqlite3.connect('railway.db') #create database
 
 current_page='Login or Sign Up' #create current page
@@ -134,9 +137,9 @@ def deleteTrain(trainNO,departureDate):
 def trainFnc():
 
     st.title("Train Administrator")
-    fnc = st.selectbox("select train",['Add Train','View Train','Search Train','Delete Train','Book Tickets','Cancel Ticket', 'View Seats'])
+    fnc = st.selectbox("select train",['add train','View Train','Search Train','Delete Train','Book Tickets','Cancel Ticket', 'View Seats'],index=0)
 
-    if fnc=='add train':
+    if fnc.lower()=='add train':
         st.header('Add new train')
         with st.form(key='new_train_details'):
             trainNO=st.text_input('train number')
@@ -150,12 +153,12 @@ def trainFnc():
                 addTrain(trainNO,trainName,departureDate,startDest,endDest)
                 st.success('Train added succesfully !')
 
-    elif fnc=='view train':
+    elif fnc.lower()=='view train':
             st.title('View trains')
             trainQuery=c.execute('SELECT * FROM trains')
             trains=trainQuery.fetchall()
 
-    elif fnc=='book tickets':
+    elif fnc.lower()=='book tickets':
             st.title('Book train tickets')
             trainNO=st.text_input('Train Number')
             seatType=st.selectbox('Seat Type',['Window','Middle','Aisle'],index=0)
@@ -167,7 +170,7 @@ def trainFnc():
                 if trainNO and passengerName and passengerAge and passengerGender:
                     bookTickets(trainNO,passengerName,passengerAge,passengerGender,seatType)
 
-    elif fnc=='cancel ticket':
+    elif fnc.lower()=='cancel ticket':
         st.title('Cancel Ticket')
         trainNO=st.text_input('Train Number')
         seatNo =st.number_input('Seat Number',min_value=1)
@@ -175,14 +178,14 @@ def trainFnc():
             if trainNO and seatNo:
                 cancelTickets(trainNO,seatNo)
 
-    elif fnc=='view seats':
+    elif fnc.lower()=='view seats':
         st.title('View Seats')
         trainNO=st.text_input('Train Number')
         if st.button('submit'):
             if trainNO:
                 viewSeat(trainNO)
 
-    elif fnc=='delete train':
+    elif fnc.lower()=='delete train':
         st.title('Delete Train')
         trainNo=st.text_input('Train Number')
         departureDate=st.date_input('Select Date')
@@ -192,6 +195,7 @@ def trainFnc():
                 deleteTrain(trainNO,departureDate)
 
 
+trainFnc()
 
 
 
